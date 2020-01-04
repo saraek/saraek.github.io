@@ -1,0 +1,198 @@
+<html>
+    <head>
+        <!-- Bootstrap og jquery -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        
+        <!-- her er det kode for å endre utseende -->    
+        <style>
+            .svar-knapp button {
+                font-size: 36px;
+                width: 60px;
+            }
+
+            .selected {
+                background-color:#FFDD87;
+            }
+        </style>
+
+    </head>
+    <body style="background-color: #55C1FF">
+        <div class="jumbotron" id="startskjerm">
+           <div class="container">
+               <h1>Saras gangespill</h1>
+               <p>Trykk for å begynne! SKRIV MER OM HVORDAN SPILLET FUNGERER    </p>
+               <button class="btn btn-primary" onclick="startSpill()">Start spillet!</button>
+           </div> 
+        </div>
+
+        <div class="container" id="spillet">
+        
+            <div class="row" style="margin-bottom: 30px;margin-top: 25px">
+                <div class="col-md-4" >
+                    <span style="background-color: #FF5988;padding:10px;font-size: 20px" id="tid">00:15</span>
+                    
+                </div>
+                <div class="col-md-4" style="font-size:36px;text-align: center">
+                    Saras gangespill
+                </div>
+
+                <div class="col-md-4"style="text-align:center">
+                    <span style="background-color: #FFDD87;padding: 10px;font-size: 20px">* POENG HER</span>
+                    
+                </div>
+            </div>
+
+
+            <div class="row"style="margin-bottom:40px;height: 350px">
+                <div class="col-md-4 svar-knapp svar-1">
+                    <div style="margin-bottom:15px">
+                        <button onclick="knappEn(this, 1)">1</button>
+                        <button onclick="knappEn(this, 2)">2</button>
+                        <button onclick="knappEn(this, 3)">3</button>
+                        <button onclick="knappEn(this, 4)">4</button>
+                        <button onclick="knappEn(this, 5)">5</button>
+                    </div>
+                    <div>
+                        <button onclick="knappEn(this, 6)">6</button>
+                        <button onclick="knappEn(this, 7)">7</button>
+                        <button onclick="knappEn(this, 8)">8</button>
+                        <button onclick="knappEn(this, 9)">9</button>
+                        <button onclick="knappEn(this, 10)">10</button>
+                    </div>
+                </div>
+                <div id="riktigSvar" class="col-md-4" style="font-size:90px;text-align: center;background-color: #A3F03D;height: 100%;padding-top:100px">
+                    -
+                </div>
+
+                <div class="col-md-4 svar-knapp svar-2" style="text-align: right;">
+                    <div style="margin-bottom: 15px">
+                        <button onclick="knappTo(this, 1)">1</button>
+                        <button onclick="knappTo(this, 2)">2</button>
+                        <button onclick="knappTo(this, 3)">3</button>
+                        <button onclick="knappTo(this, 4)">4</button>
+                        <button onclick="knappTo(this, 5)">5</button>
+                    </div>
+                    <div>
+                        <button onclick="knappTo(this, 6)">6</button>
+                        <button onclick="knappTo(this, 7)">7</button>
+                        <button onclick="knappTo(this, 8)">8</button>
+                        <button onclick="knappTo(this, 9)">9</button>
+                        <button onclick="knappTo(this, 10)">10</button>
+                    </div>  
+                </div>
+            </div>
+            <div class="row" style="margin-top: 140px">
+                <div class="col-md-4">
+                
+                </div>
+                <div class="col-md-4" style="text-align:center;font-size: 35px">
+                    NIVÅ 1
+                </div>
+
+                <div class="col-md-4" style="text-align:center">
+                    <div style="font-size:20px;margin-bottom:15px">oppgave</div>
+                    <span style="background-color: #8A6B9E;padding: 15px;font-size: 20px;color: beige" id ="runde">-</span>
+
+                </div>
+            </div>
+        </div>        
+
+
+
+
+    </body>
+
+    <script>
+        $('#spillet').hide();
+
+        var tall1;
+        var tall2;
+        var riktigSvar;
+        var runde;
+        var timeout;
+
+        function startSpill() {
+            $('#spillet').show();
+            $('#startskjerm').hide();
+
+            runde = 0;
+            startRunde();
+
+
+        }
+
+        function startRunde() {
+            tall1 = null;
+            tall2 = null;
+
+            $('.svar-1 button').removeClass('selected');
+            $('.svar-2 button').removeClass('selected');
+            
+
+            var t1 = Math.floor(Math.random() * 10) + 1;
+            var t2 = Math.floor(Math.random() * 10) + 1;
+            riktigSvar=t1*t2;
+
+
+            $('#riktigSvar').html(riktigSvar);
+            runde = runde + 1;
+            $('#runde').html(runde);
+
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+
+            countDown(15);
+        }
+
+        function countDown(timeLeft) {
+            timeout = setTimeout(() => {
+                if (timeLeft > 0) {
+                    timeLeft = timeLeft - 1;
+                    $('#tid').html(timeLeft);
+                    countDown(timeLeft);
+                } else {
+                    alert('Tiden er ute!!');
+                }
+            }, 1000);
+        }
+
+        function knappEn(sender, tall) {
+            $('.svar-1 button').removeClass('selected'); 
+            $(sender).addClass('selected');
+            
+            tall1=tall;
+            regnUt();
+        }
+
+        function knappTo(sender, tall) {
+            $('.svar-2 button').removeClass('selected');
+            $(sender).addClass('selected');
+
+            tall2=tall;
+            regnUt();
+        }
+
+        function regnUt(){
+            if (tall1 && tall2) {
+                var svaret = tall1*tall2;
+
+                if (svaret == riktigSvar) {
+                    startRunde();
+                } else {
+                    alert('Feil svar, du er ute');
+
+                    if (timeout) {
+                        clearTimeout(timeout);
+                    }
+                }
+                
+            }
+        }
+
+    </script>
+
+
+</html>
