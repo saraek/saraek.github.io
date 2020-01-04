@@ -16,7 +16,7 @@
         <style>
             .svar-knapp button {
                 font-size: 36px;
-                width: 60px;
+                min-width: 50px;
             }
 
             .selected {
@@ -37,22 +37,22 @@
         <div class="container" id="spillet">
         
             <div class="row" style="margin-bottom: 30px;margin-top: 25px">
-                <div class="col-md-4 col-12" >
-                    <span style="background-color: #FF5988;padding:10px;font-size: 20px" id="tid">00:15</span>
+                <div class="col-md-4 col-6" >
+                    <span style="background-color: #FF5988;padding:10px;font-size: 20px"><span id="tid">-</span> sek</span>
                     
                 </div>
-                <div class="col-md-4 col-12 text-left text-md-center mt-2 mt-md-0" style="font-size:36px">
+                <div class="col-md-4 d-none d-md-block text-left text-md-center" style="font-size:36px">
                     Saras gangespill
                 </div>
 
-                <div class="col-md-4 col-12 text-left text-md-center mt-2 mt-md-0">
+                <div class="col-md-4 col-6 text-right text-md-center">
                     <span style="background-color: #FFDD87;padding: 10px;font-size: 20px">* POENG HER</span>
                 </div>
             </div>
 
 
             <div class="row"style="margin-bottom:40px">
-                <div class="col-md-4 svar-knapp svar-1">
+                <div class="col-md-4 svar-knapp svar-1 text-center text-md-left">
                     <div style="margin-bottom:15px">
                         <button onclick="knappEn(this, 1)">1</button>
                         <button onclick="knappEn(this, 2)">2</button>
@@ -68,11 +68,11 @@
                         <button onclick="knappEn(this, 10)">10</button>
                     </div>
                 </div>
-                <div id="riktigSvar" class="col-md-4 mt-4 mt-md-0" style="font-size:90px;text-align: center;background-color: #A3F03D;height: 100%;padding-top:100px;height: 350px">
-                    -
+                <div class="col-md-4 mt-4 mt-md-0 p-4" style="font-size:90px;text-align: center;background-color: #A3F03D;height: 100%;">
+                    <div id="riktigSvar" class="p-4 text-center my-0 my-md-4">-</div>
                 </div>
 
-                <div class="col-md-4 svar-knapp svar-2 text-left text-md-right mt-4 mt-md-0">
+                <div class="col-md-4 svar-knapp svar-2 text-center text-md-right mt-4 mt-md-0">
                     <div style="margin-bottom: 15px">
                         <button onclick="knappTo(this, 1)">1</button>
                         <button onclick="knappTo(this, 2)">2</button>
@@ -154,6 +154,8 @@
         }
 
         function countDown(timeLeft) {
+            $('#tid').html(timeLeft);
+
             timeout = setTimeout(() => {
                 if (timeLeft > 0) {
                     timeLeft = timeLeft - 1;
