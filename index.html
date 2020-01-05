@@ -26,12 +26,35 @@
 
     </head>
     <body style="background-color: #55C1FF">
-        <div class="jumbotron" id="startskjerm">
-           <div class="container">
-               <h1>Saras gangespill</h1>
-               <p>Trykk for å begynne! SKRIV MER OM HVORDAN SPILLET FUNGERER    </p>
-               <button class="btn btn-primary" onclick="startSpill()">Start spillet!</button>
-           </div> 
+        <div id="startskjerm" class="bg-white p-4">
+            <div class="container">
+                <h1>Saras gangespill</h1>
+                <p>Trykk for å begynne! SKRIV MER OM HVORDAN SPILLET FUNGERER</p>
+                
+                <div class="card-deck text-center mb-4" style="margin-top:50px">
+                    <div class="card ">
+                        <div class="card-header">LETT</div>
+                        <div class="card-body">
+                            <p>15 sekunder</p>
+                            <button class="btn btn-primary" onclick="startSpill(1)">Start spillet!</button>
+                        </div>
+                    </div>
+                    <div class="card ">
+                        <div class="card-header">MIDDELS</div>
+                        <div class="card-body">
+                            <p>10 sekunder</p>
+                            <button class="btn btn-primary" onclick="startSpill(2)">Start spillet!</button>
+                        </div>
+                    </div>
+                    <div class="card ">
+                        <div class="card-header">VANSKELIG</div>
+                        <div class="card-body">
+                            <p>5 sekunder</p>
+                            <button class="btn btn-primary" onclick="startSpill(3)">Start spillet!</button>
+                        </div>
+                    </div>
+                </div> 
+           </div>
         </div>
 
         <div class="container" id="spillet">
@@ -46,7 +69,7 @@
                 </div>
 
                 <div class="col-md-4 col-6 text-right text-md-center">
-                    <span style="background-color: #FFDD87;padding: 10px;font-size: 20px">* POENG HER</span>
+                    <span style="background-color: #FFDD87;padding: 10px;font-size: 20px">Poeng: <span id="poeng"></span></span>
                 </div>
             </div>
 
@@ -94,7 +117,7 @@
                 
                 </div>
                 <div class="col-md-4" style="text-align:center;font-size: 35px">
-                    NIVÅ 1
+                    NIVÅ <span id="nivaa"></span>
                 </div>
 
                 <div class="col-md-4" style="text-align:center">
@@ -116,14 +139,29 @@
         var tall1;
         var tall2;
         var riktigSvar;
+        var tidIgjen;
+        var poeng;
         var runde;
         var timeout;
-
-        function startSpill() {
+       var tidPerRunde;
+        function startSpill(nivaa) {
             $('#spillet').show();
             $('#startskjerm').hide();
 
             runde = 0;
+            poeng = 0;
+
+            if(nivaa==1) {
+                tidPerRunde = 15;
+            } else if(nivaa==2){
+                tidPerRunde=10;
+            } else if(nivaa==3){
+                tidPerRunde=5;
+            }
+
+            $('#nivaa').html(nivaa);
+
+
             startRunde();
 
 
@@ -145,22 +183,22 @@
             $('#riktigSvar').html(riktigSvar);
             runde = runde + 1;
             $('#runde').html(runde);
-
+            $('#poeng').html(poeng);
             if (timeout) {
                 clearTimeout(timeout);
             }
-
-            countDown(15);
+            tidIgjen = tidPerRunde;
+            countDown();
         }
 
-        function countDown(timeLeft) {
-            $('#tid').html(timeLeft);
+        function countDown() {
+            $('#tid').html(tidIgjen);
 
             timeout = setTimeout(() => {
-                if (timeLeft > 0) {
-                    timeLeft = timeLeft - 1;
-                    $('#tid').html(timeLeft);
-                    countDown(timeLeft);
+                if (tidIgjen > 0) {
+                    tidIgjen = tidIgjen - 1;
+                    $('#tid').html(tidIgjen);
+                    countDown(tidIgjen);
                 } else {
                     alert('Tiden er ute!!');
                 }
@@ -188,6 +226,8 @@
                 var svaret = tall1*tall2;
 
                 if (svaret == riktigSvar) {
+                    var poengDenneRunden=tidIgjen;
+                    poeng=+poeng+poengDenneRunden;
                     startRunde();
                 } else {
                     alert('Feil svar, du er ute');
