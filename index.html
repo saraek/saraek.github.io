@@ -26,10 +26,14 @@
 
     </head>
     <body style="background-color: #55C1FF">
-        <div id="startskjerm" class="bg-white p-4">
+       <div id="startskjerm" class="bg-white p-4">
             <div class="container">
                 <h1>Saras gangespill</h1>
-                <p>Trykk for å begynne! SKRIV MER OM HVORDAN SPILLET FUNGERER</p>
+                <p>
+                    Hvis du trykker på lett middels eller vanskelig vil du komme til en side der du skal trykke på en knapp på hver side.
+                    De to knappene du trykker på skal ganges og bli det tallet i midten.
+                    Nede kan du se hvilket nivå du er på. Lett er nivå 1, middels er nivå 2, og vanskelig er nivå 3.                    
+                </p>
                 
                 <div class="card-deck text-center mb-4" style="margin-top:50px">
                     <div class="card ">
@@ -56,7 +60,45 @@
                 </div> 
            </div>
         </div>
+        <div id="GAMEOVER" class="bg-white p-4">
+            <div class="container">
+                <h1>DU ER UTE😥</h1>
+                <p id="poengmelding">
 
+                </p>
+                <p>
+                    Hvis du trykker på lett middels eller vanskelig vil du komme til en side der du skal trykke på en knapp på hver side.
+                    De to knappene du trykker på skal ganges og bli det tallet i midten.
+                    Nede kan du se hvilket nivå du er på. Lett er nivå 1, middels er nivå 2, og vanskelig er nivå 3.                    
+                </p>
+             
+                
+                <div class="card-deck text-center mb-4" style="margin-top:50px">
+                    <div class="card ">
+                        <div class="card-header">LETT</div>
+                        <div class="card-body">
+                            <p>15 sekunder</p>
+                            <button class="btn btn-primary" onclick="startSpill(1)">Start spillet!</button>
+                        </div>
+                    </div>
+                    <div class="card ">
+                        <div class="card-header">MIDDELS</div>
+                        <div class="card-body">
+                            <p>10 sekunder</p>
+                            <button class="btn btn-primary" onclick="startSpill(2)">Start spillet!</button>
+                        </div>
+                    </div>
+                    <div class="card ">
+                        <div class="card-header">VANSKELIG</div>
+                        <div class="card-body">
+                            <p>5 sekunder</p>
+                            <button class="btn btn-primary" onclick="startSpill(3)">Start spillet!</button>
+                        </div>
+                    </div>
+                </div> 
+           </div>
+        </div>
+ 
         <div class="container" id="spillet">
         
             <div class="row" style="margin-bottom: 30px;margin-top: 25px">
@@ -135,7 +177,7 @@
 
     <script>
         $('#spillet').hide();
-
+        $('#GAMEOVER').hide();
         var tall1;
         var tall2;
         var riktigSvar;
@@ -144,10 +186,11 @@
         var runde;
         var timeout;
        var tidPerRunde;
+
         function startSpill(nivaa) {
             $('#spillet').show();
             $('#startskjerm').hide();
-
+            $("#GAMEOVER").hide();
             runde = 0;
             poeng = 0;
 
@@ -161,6 +204,7 @@
 
             $('#nivaa').html(nivaa);
 
+            window.scrollTo(0,0);
 
             startRunde();
 
@@ -200,7 +244,12 @@
                     $('#tid').html(tidIgjen);
                     countDown(tidIgjen);
                 } else {
-                    alert('Tiden er ute!!');
+                    // her er tiden ute
+                    var melding = "Du klarte " + (runde-1) + " oppgaver og " + poeng + " poeng";
+                    $('#poengmelding').html(melding);
+                     
+                    $('#spillet').hide();
+                    $('#GAMEOVER').show();
                 }
             }, 1000);
         }
@@ -230,11 +279,16 @@
                     poeng=+poeng+poengDenneRunden;
                     startRunde();
                 } else {
-                    alert('Feil svar, du er ute');
+                    $('#spillet').hide();
+                    $('#GAMEOVER').show();;
 
                     if (timeout) {
                         clearTimeout(timeout);
                     }
+
+                    var melding = "Du klarte " + (runde-1) + " oppgaver og " + poeng + " poeng";
+                    $('#poengmelding').html(melding);
+                     
                 }
                 
             }
