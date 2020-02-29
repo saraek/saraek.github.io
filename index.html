@@ -67,6 +67,7 @@
                 <p id="poengmelding">
 
                 </p>
+                <p id="highscorerMelding"></p>
                 <p>
                     Hvis du trykker på lett middels eller vanskelig vil du få oppgaver der du skal trykke på tall på hver side.
                     De to tallene du trykker på skal ganges og bli det tallet i midten.
@@ -157,8 +158,8 @@
                 </div>
             </div>
             <div class="row" style="margin-top: 140px">
-                <div class="col-md-4">
-                
+                <div class="col-md-4" style="font-size: 35px">
+                    HIGHSCORE <span id="highscore"></span>
                 </div>
                 <div class="col-md-4" style="text-align:center;font-size: 35px">
                     NIVÅ <span id="nivaa"></span>
@@ -187,7 +188,13 @@
         var poeng;
         var runde;
         var timeout;
-       var tidPerRunde;
+        var tidPerRunde;
+        var highscore = 0;
+
+        if (localStorage.getItem('highscore')) {
+            highscore = +localStorage.getItem('highscore');
+        }
+        $("#highscore").html(highscore);
 
         function startSpill(nivaa) {
             $('#spillet').show();
@@ -247,11 +254,7 @@
                     countDown(tidIgjen);
                 } else {
                     // her er tiden ute
-                    var melding = "Du klarte " + (runde-1) + " oppgaver og " + poeng + " poeng";
-                    $('#poengmelding').html(melding);
-                     
-                    $('#spillet').hide();
-                    $('#GAMEOVER').show();
+                    spillSlutt();
                 }
             }, 1000);
         }
@@ -280,20 +283,37 @@
                     var poengDenneRunden=tidIgjen;
                     poeng=+poeng+poengDenneRunden;
                     startRunde();
-                } else {
-                    $('#spillet').hide();
-                    $('#GAMEOVER').show();;
-
-                    if (timeout) {
-                        clearTimeout(timeout);
-                    }
-
-                    var melding = "Du klarte " + (runde-1) + " oppgaver og " + poeng + " poeng";
-                    $('#poengmelding').html(melding);
-                     
+                } else {                    
+                    spillSlutt();
                 }
                 
             }
+        }
+
+        function spillSlutt() {
+            $('#spillet').hide();
+            $('#GAMEOVER').show();
+
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+
+            var melding = "Du klarte " + (runde-1) + " oppgaver og " + poeng + " poeng";
+
+            $('#poengmelding').html(melding);
+
+            if (poeng > highscore){
+                highscore = poeng;
+                localStorage.setItem('highscore', highscore);
+
+                $("#highscore").html(highscore);
+                var highscorerMelding = "Ny highscore💪💪💪";
+                $('#highscorerMelding').html(highscorerMelding);
+                
+                $('#highscorerMelding').show();
+            } else {
+                $('#highscorerMelding').hide();
+            } 
         }
 
     </script>
